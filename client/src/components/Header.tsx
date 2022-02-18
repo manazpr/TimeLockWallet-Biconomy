@@ -10,8 +10,15 @@ import ethLogo from "../assets/eth.png";
 
 export default function Header(): JSX.Element {
   const [selectedNav, setSelectedNav] = useState('Deposit');
+  const connectWallet = async () => {
+    await (active ? deactivate() : activate(Injected));
+    await (biconomyActive
+      ? biconomyDeactivate()
+      : biconomyActivate(Injected));
+  }
 
   const { activate, deactivate, active, account } = useWeb3React();
+
   const {
     activate: biconomyActivate,
     deactivate: biconomyDeactivate,
@@ -36,11 +43,11 @@ export default function Header(): JSX.Element {
              
      
       <div className="flex-1 flex justify-center items-center">
-        <div className="flex bg-[#191B1F] rounded-3xl">
+        <div className="flex bg-gray-900 rounded-3xl">
           <div
             onClick={() => setSelectedNav('Deposit')}
             className={`$"px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl" ${
-              selectedNav === 'Deposit' && "bg-[#20242A]"
+              selectedNav === 'Deposit' && "bg-gray-800 rounded-2xl"
             }`}
           >
             Deposit
@@ -48,7 +55,7 @@ export default function Header(): JSX.Element {
           <div
             onClick={() => setSelectedNav('Claim')}
             className={`$px-4 py-2 m-1 flex items-center text-lg font-semibold text-[0.9rem] cursor-pointer rounded-3xl ${
-              selectedNav === 'Claim' && "bg-[#20242A]"
+              selectedNav === 'Claim' && "bg-gray-800 rounded-2xl"
             }`}
           >
             Claim
@@ -66,7 +73,7 @@ export default function Header(): JSX.Element {
         </div>
       </div>
       <div className="flex w-1/4 justify-end items-center">
-        <div className={`$"flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}>
+        <div className={`$"flex items-center bg-gray-900 rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}>
           <div className="flex items-center justify-center w-8 h-8">
             <img src={ethLogo} alt='eth logo' height={20} width={20} />
           </div>
@@ -76,30 +83,29 @@ export default function Header(): JSX.Element {
           </div>
         </div>     
       </div>
-      <div className={`$"flex items-center bg-[#191B1F] rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}>
+      
+             
+             
+        {active ? (
+          <div className={`$"flex items-center bg-gray-900 rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}>
+            <div onClick={async() => connectWallet()} className="h-8 flex items-center">{account?.slice(0,7)}...{account?.slice(35)}</div>
+          </div>
+        ) : (
+          <div
+            onClick={async() => connectWallet()}
+            className={`$"flex items-center bg-gray-900 rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}
+          >
+            <div className={`$"bg-[#172A42] border border-[#163256] hover:border-[#234169] h-full rounded-2xl flex items-center justify-center text-[#4F90EA]" $"p-2"`}>
+              {active ? "Disconnect" : "Connect with Metamask"}
+            </div>
+          </div>
+        )}
+             
+             <div className={`$"flex items-center bg-gray-900 rounded-2xl mx-2 text-[0.9rem] font-semibold cursor-pointer" $"p-2"`}>
           <div className={`$"flex items-center justify-center w-8 h-8" mx-2`}>
             <HiOutlineDotsVertical />
           </div>
         </div>
-             
-             
-             
-             
-             
-             
-              {active && (<h3>{account}</h3>)}
-                <Button
-                  color="inherit"
-                  onClick={async () => {
-                    await (active ? deactivate() : activate(Injected));
-                    await (biconomyActive
-                      ? biconomyDeactivate()
-                      : biconomyActivate(Injected));
-                  }}
-                >
-                  {active ? "Disconnect" : "Connect with Metamask"}
-                </Button>
-
     </div>
   );
 }
