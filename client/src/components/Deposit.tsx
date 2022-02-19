@@ -1,19 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import TextField from "@material-ui/core/TextField";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import React, { useState, useEffect, Fragment } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
-import { RiSettings3Fill } from 'react-icons/ri'
-import { AiOutlineDown } from 'react-icons/ai'
-import ethLogo from '../assets/eth.png'
-
+import { AiOutlineDown } from 'react-icons/ai';
+import ethLogo from '../assets/eth.png';
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { ERC20Util } from "../ethereum/ERC20Util";
 import { TimeLockDepositType } from "../types/interfaces";
@@ -22,35 +12,14 @@ const style = {
   wrapper: `w-screen flex items-center justify-center mt-14`,
   content: `bg-gray-900 w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
-  transferPropContainer: `bg-[#20242A] my-3 rounded-2xl p-6 text-3xl  border border-[#20242A] hover:border-[#41444F]  flex justify-between`,
+  transferPropContainer: `bg-gray-800 my-3 rounded-2xl p-6 text-3xl  border border-gray-800 hover:border-gray-600  flex justify-between`,
   transferPropInput: `bg-transparent placeholder:text-gray-200 outline-none mb-6 w-full text-2xl`,
   currencySelector: `flex w-1/4`,
   currencySelectorContent: `w-full h-min flex justify-between items-center bg-[#2D2F36] hover:bg-[#41444F] rounded-2xl text-xl font-medium cursor-pointer p-2 mt-[-0.2rem]`,
   currencySelectorIcon: `flex items-center`,
   currencySelectorTicker: `mx-2`,
   currencySelectorArrow: `text-lg`,
-  confirmButton: `bg-blue-800 my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center justify-center cursor-pointer border border-[#2172E5] hover:border-[#234169]`,
-}
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: '#0a0b0d',
-    padding: 0,
-    border: 'none',
-  },
-  overlay: {
-    backgroundColor: 'rgba(10, 11, 13, 0.75)',
-  },
-}
-
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+  confirmButton: `bg-blue-700 my-2 rounded-2xl py-6 px-8 text-xl font-semibold flex items-center justify-center cursor-pointer border border-[#2172E5] hover:border-[#234169]`,
 }
 
 export default function Deposit(): JSX.Element {
@@ -139,7 +108,6 @@ export default function Deposit(): JSX.Element {
         actualTokenAmount
       );
       setStatusMessage("");
-      //handleClose();
       window.location.reload();
     } catch (e) {
       console.error("Error Creating ERC20 Deposit: ", e);
@@ -158,7 +126,7 @@ export default function Deposit(): JSX.Element {
               new Decimal(10).pow(decimals)
             );
             setBalance(actualBalance);
-            setStatusMessage(`Token Balance: ${actualBalance.toFixed()}`);
+            setStatusMessage(`Token Balance: ${actualBalance.toFixed(5)}`);
           } catch (e) {
             setStatusMessage("Not a valid ERC20 token");
           }
@@ -170,7 +138,7 @@ export default function Deposit(): JSX.Element {
           new Decimal(10).pow(18)
         );
         setBalance(actualBalance);
-        setStatusMessage(`ETH Balance: ${actualBalance.toFixed()}`);
+        setStatusMessage(`ETH Balance: ${actualBalance.toFixed(5)}`);
       }
     })();
   }, [depositType, tokenAddress]);
@@ -181,60 +149,24 @@ export default function Deposit(): JSX.Element {
       <div className={style.content}>
         <div className={style.formHeader}>
           <div>Deposit</div>
+          
           <div>
-            <RiSettings3Fill />
+         {statusMessage}
           </div>
         </div>
         <div className={style.transferPropContainer}>
           <input
-            type='text'
+            type='number'
             className={style.transferPropInput}
-            placeholder='0.0'
-            pattern='^[0-9]*[.,]?[0-9]*$'
-            
+            placeholder='Amount'
+            onChange={(event) => setAmount(parseFloat(event.target.value))}
+            required  
           />
-          <div className={style.currencySelector}>
-            <div className={style.currencySelectorContent}>
-              <div className={style.currencySelectorIcon}>
-                <img src={ethLogo} alt='eth logo' height={20} width={20} />
+               
+                <div className="flex items-center p-2">
+                <img src={ethLogo} alt='eth logo' height={50} width={50} />
               </div>
-              <div className={style.currencySelectorTicker}>ETH</div>
-              <AiOutlineDown />
-            </div>
-          </div>
-        </div>
-        <div className={style.transferPropContainer}>
-          <input
-            type='text'
-            className={style.transferPropInput}
-            placeholder='0x...'
-            
-          />
-          <div className={style.currencySelector}></div>
-        </div>
-        <div  className={style.confirmButton}>
-          Confirm
-        </div>
-      </div>
-
-      
-    </div>
-
-
-
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Recipient Address"
-            type="text"
-            fullWidth
-            onChange={(event) => setRecipientAddress(event.target.value)}
-            required
-            error={!isValidEthAddress(recipientAddress)}
-          />
-          <FormControl>
-            <RadioGroup
-              value={
+                <select value={
                 {
                   [TimeLockDepositType.ETH]: "ETH",
                   [TimeLockDepositType.ERC20]: "ERC20",
@@ -247,75 +179,66 @@ export default function Deposit(): JSX.Element {
                     ERC20: TimeLockDepositType.ERC20,
                   }[event.target.value] as TimeLockDepositType
                 )
-              }
-            >
-              <Grid container>
-                <Grid item>
-                  <FormControlLabel
-                    value="ETH"
-                    control={<Radio />}
-                    label="ETH"
-                  />
-                </Grid>
-                <Grid item>
-                  <FormControlLabel
-                    value="ERC20"
-                    control={<Radio />}
-                    label="ERC20"
-                  />
-                </Grid>
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-          {depositType === TimeLockDepositType.ERC20 && (
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Token"
-              type="text"
-              fullWidth
-              onChange={(event) => setTokenAddress(event.target.value)}
-              required
-              error={!isValidEthAddress(tokenAddress)}
-            />
-          )}
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Unlock Date"
-            type="datetime-local"
-            defaultValue={toIsoString(new Date()).slice(0, 19)}
-            fullWidth
-            onChange={(event) => setUnlockDate(new Date(event.target.value))}
-            required
-            helperText="Must be in future"
-            error={unlockDate.getTime() < new Date().getTime()}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Amount"
-            type="number"
-            fullWidth
-            onChange={(event) => setAmount(parseFloat(event.target.value))}
-            required
-            error={balance.lessThan(amount)}
-          />
-        
-        
-          <Button
-            onClick={async () => {
+              } className="w-min h-min flex justify-between items-center bg-gray-800 hover:bg-gray-800 rounded-2xl text-xl font-medium cursor-pointer p-2 mt-[-0.2rem]">
+                <option value="ETH" label="ETH" className={style.currencySelectorTicker}>
+                  ETH
+               </option>
+                <option value="ERC20" label="ERC20">
+                  ERC20
+                </option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <AiOutlineDown />
+              </div>
+        </div>
+        <div className={style.transferPropContainer}>
+          <input
+            type='text'
+            className={style.transferPropInput}
+            placeholder='Address (0x...)'
+            onChange={(event) => setRecipientAddress(event.target.value)}
+            required />
+          
+          <div className={style.currencySelector}></div>
+        </div>
+        {depositType === TimeLockDepositType.ERC20 && (       
+        <div className={style.transferPropContainer}>
+          <input
+            type='text'
+            className={style.transferPropInput}
+            placeholder='Token Contract'
+            onChange={(event) => setTokenAddress(event.target.value)}
+            required />
+          
+          <div className={style.currencySelector}></div>
+        </div>
+        )}
+
+
+        <div className={style.transferPropContainer}>
+          <input
+           type="datetime-local"
+           placeholder='Set Time Interval'
+           defaultValue={toIsoString(new Date()).slice(0, 19)}
+           onChange={(event) => setUnlockDate(new Date(event.target.value))}
+           required
+            className={style.transferPropInput}
+            
+           />
+          
+          <div className={style.currencySelector}></div>
+        </div>
+
+        <div onClick={async () => {
               await {
                 [TimeLockDepositType.ETH]: createEthDeposit,
                 [TimeLockDepositType.ERC20]: createErc20Deposit,
               }[depositType]();
-            }}
-            color="primary"
-          >
-            Create
-          </Button>
-        
-        {statusMessage !== "" && <Alert severity="info">{statusMessage}</Alert>}
+            }} className={style.confirmButton}>
+          Confirm
+        </div>
+      </div> 
+    </div>
     </div>
   );
 }

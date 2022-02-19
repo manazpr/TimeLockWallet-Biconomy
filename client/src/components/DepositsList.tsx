@@ -42,12 +42,12 @@ export default function DepositsList(): JSX.Element {
   }, [account, chainId]);
 
   return (
-    <Paper className={classes.paper}>
+    
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Grid container justifyContent="center">
             <Grid item>
-              <Typography variant="h5">INBOUND DEPOSITS</Typography>
+              <Typography variant="h5">DEPOSITS</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -57,6 +57,6 @@ export default function DepositsList(): JSX.Element {
           </Grid>
         ))}
       </Grid>
-    </Paper>
+  
   );
 }

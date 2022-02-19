@@ -13,27 +13,11 @@ import { ERC20Util } from "../ethereum/ERC20Util";
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { IInboundDepositProps, TimeLockDepositType } from "../types/interfaces";
 import { ProviderContext } from "../context/providercontext";
+import ethLogo from "../assets/eth.png";
 
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    fontSize: 14,
-  },
-  p: {
-    marginTop: 10,
-  },
-  content: {
-    paddingBottom: 0,
-  },
-});
+
 
 export default function DepositCard(props: IInboundDepositProps) {
-  const classes = useStyles();
   const { library, chainId, account } = useWeb3React();
   const { library: biconomyLibrary, account: biconomyAccount } =
     useWeb3React("biconomy");
@@ -89,34 +73,34 @@ export default function DepositCard(props: IInboundDepositProps) {
   };
 
   return (
-    <Card className={classes.root} variant="outlined">
-      <CardContent className={classes.content}>
-        <Typography variant="h6" component="h2">
-          {displayAmount != null && <>{displayAmount.toString()}</>}{" "}
+
+<>
+  <div className="bg-white rounded-3xl border shadow-xl p-8 w-3/6 align-center">
+    <div className="flex justify-between items-center mb-4">
+    <img src={ethLogo} alt='eth logo' height={80} width={80}/>
+    <h1 className="font-bold text-xl text-gray-700">{displayAmount != null && <>{displayAmount.toString()}</>}{" "}
           {props.deposit.depositType === TimeLockDepositType.ETH
             ? "ETH"
-            : "Tokens"}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          Deposit ID: {props.deposit.depositId.toString()}
-          <br />
-          Sender: {props.deposit.depositor}
-        </Typography>
-        {props.deposit.depositType === TimeLockDepositType.ERC20 && (
-          <Typography className={classes.pos} color="textSecondary">
-            Token: {props.deposit.erc20Token}
-          </Typography>
-        )}
-        <Typography variant="body2" component="p" className={classes.p}>
-          {props.deposit.claimed ? (
-            "Claimed"
+            : "Tokens"}</h1>
+        
+      <div>
+     
+     
+
+      <span className="font-medium text-xs text-gray-500 flex justify-end">Received From</span>
+      <span className="font-bold text-green-500 flex justify-end">{props.deposit.depositor}</span><br /><br />
+      <span className="font-medium text-xs text-gray-500 flex justify-end">Status</span>
+      <span className="font-bold text-red-500 flex justify-end"></span>
+        <span className="flex justify-end font-bold text-red-500 ">
+        {props.deposit.claimed ? (
+           "Claimed"
           ) : (
             <>
-              {`Deposit can be claimed after ${new Date(
+              {`${new Date(
                 props.deposit.minimumReleaseTimestamp.toNumber() * 1000
               ).toLocaleString()}`}
               <br />
-              Time Remaining:{" "}
+              {" "}
               <Countdown
                 date={
                   new Date(
@@ -126,24 +110,23 @@ export default function DepositCard(props: IInboundDepositProps) {
               />
             </>
           )}
-        </Typography>
-      </CardContent>
-      {props.deposit.claimed || (
-        <CardActions>
-          <Button
-            size="small"
-            onClick={claim}
-            disabled={
-              props.deposit.claimed ||
-              props.deposit.minimumReleaseTimestamp.toNumber() >
-                (new Date().getTime() as number) / 1000
-            }
+      </span>
+      </div>
+    </div>
+    <div>
+           {props.deposit.claimed || (
+          <div
+            onClick={claim} className="bg-blue-700 my-1 rounded-2xl py-3 px-1 text-white font-color-white font-semibold flex items-center justify-center cursor-pointer border border-[#2172E5] hover:border-[#234169]"
           >
             Claim
-          </Button>
-        </CardActions>
+          </div>
+     
       )}
       {loading && <LinearProgress />}
-    </Card>
+    </div>
+  </div>
+
+</>
+
   );
 }
