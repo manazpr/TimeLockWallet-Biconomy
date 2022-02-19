@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Tab } from '@headlessui/react'
 import Header from "./Header";
 import DepositsList from "./DepositsList";
 import Deposit from "./Deposit";

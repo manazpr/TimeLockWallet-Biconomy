@@ -32,7 +32,7 @@ export default function DepositsList(): JSX.Element {
 
   return (
    
-    <Grid container spacing={1}>
+    <Grid container spacing={1} alignContent="center">
       
       {inboundDeposits.map((deposit) => (
         <Grid item xs={12} key={deposit.depositId.toNumber()}>

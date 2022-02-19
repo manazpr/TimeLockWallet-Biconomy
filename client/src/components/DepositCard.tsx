@@ -52,11 +52,11 @@ export default function DepositCard(props: IInboundDepositProps) {
 
   const claim = async () => {
     if (biconomyInitialized) {
-      const timeLockWalletUtil = new TimeLockWalletUtil(
+      const timeLockUtil = new TimeLockWalletUtil(
         biconomyLibrary.getSigner(biconomyAccount)
       );
       setLoading(true);
-      await timeLockWalletUtil.claimDeposit(props.deposit.depositId);
+      await timeLockUtil.claimDeposit(props.deposit.depositId);
       setLoading(false);
       window.location.reload(false);
     } else {
