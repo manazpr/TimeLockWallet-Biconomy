@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import { useWeb3React } from "@web3-react/core";
-
 import DepositCard from "./DepositCard";
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { ITimeLockDeposit } from "../types/interfaces";
 
-const useStyles = makeStyles({
-  paper: {
-    padding: 10,
-  },
-});
-
 export default function DepositsList(): JSX.Element {
-  const classes = useStyles();
   const { account, library, chainId } = useWeb3React();
   const [inboundDeposits, setInboundDeposits] = useState<ITimeLockDeposit[]>(
     []
@@ -25,8 +14,8 @@ export default function DepositsList(): JSX.Element {
   useEffect(() => {
     try {
       (async () => {
-        const timeLockWalletUtil = new TimeLockWalletUtil(library.getSigner(account));
-        const deposits = await timeLockWalletUtil.getDepositsByReceiver(
+        const timeLockUtil = new TimeLockWalletUtil(library.getSigner(account));
+        const deposits = await timeLockUtil.getDepositsByReceiver(
           account as string
         );
         deposits.sort(
@@ -42,21 +31,15 @@ export default function DepositsList(): JSX.Element {
   }, [account, chainId]);
 
   return (
-    
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          <Grid container justifyContent="center">
-            <Grid item>
-              <Typography variant="h5">DEPOSITS</Typography>
-            </Grid>
-          </Grid>
+   
+    <Grid container spacing={1}>
+      
+      {inboundDeposits.map((deposit) => (
+        <Grid item xs={12} key={deposit.depositId.toNumber()}>
+          <DepositCard deposit={deposit} />
         </Grid>
-        {inboundDeposits.map((deposit) => (
-          <Grid item xs={12} key={deposit.depositId.toNumber()}>
-            <DepositCard deposit={deposit} />
-          </Grid>
-        ))}
-      </Grid>
-  
-  );
+      ))}
+    </Grid>
+ 
+);
 }

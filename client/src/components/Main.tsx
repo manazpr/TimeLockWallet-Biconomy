@@ -16,8 +16,8 @@ const Main = (): JSX.Element => {
       <Header />
       {account && (
           <> 
-     <Deposit />
-     <DepositsList/>
+     <Deposit /><DepositsList/>
+     
     
     </>
     )}

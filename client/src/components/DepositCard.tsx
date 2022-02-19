@@ -1,10 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import Countdown from "react-countdown";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { Decimal } from "decimal.js";
@@ -14,8 +8,6 @@ import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { IInboundDepositProps, TimeLockDepositType } from "../types/interfaces";
 import { ProviderContext } from "../context/providercontext";
 import ethLogo from "../assets/eth.png";
-
-
 
 export default function DepositCard(props: IInboundDepositProps) {
   const { library, chainId, account } = useWeb3React();
@@ -73,9 +65,7 @@ export default function DepositCard(props: IInboundDepositProps) {
   };
 
   return (
-
-<>
-  <div className="bg-white rounded-3xl border shadow-xl p-8 w-3/6 align-center">
+  <div className="bg-white rounded-3xl border shadow-xl p-8 w-3/6 align-center justify-end ">
     <div className="flex justify-between items-center mb-4">
     <img src={ethLogo} alt='eth logo' height={80} width={80}/>
     <h1 className="font-bold text-xl text-gray-700">{displayAmount != null && <>{displayAmount.toString()}</>}{" "}
@@ -84,13 +74,9 @@ export default function DepositCard(props: IInboundDepositProps) {
             : "Tokens"}</h1>
         
       <div>
-     
-     
-
       <span className="font-medium text-xs text-gray-500 flex justify-end">Received From</span>
       <span className="font-bold text-green-500 flex justify-end">{props.deposit.depositor}</span><br /><br />
       <span className="font-medium text-xs text-gray-500 flex justify-end">Status</span>
-      <span className="font-bold text-red-500 flex justify-end"></span>
         <span className="flex justify-end font-bold text-red-500 ">
         {props.deposit.claimed ? (
            "Claimed"
@@ -125,8 +111,6 @@ export default function DepositCard(props: IInboundDepositProps) {
       {loading && <LinearProgress />}
     </div>
   </div>
-
-</>
 
   );
 }

@@ -9,7 +9,7 @@ import { ERC20Util } from "../ethereum/ERC20Util";
 import { TimeLockDepositType } from "../types/interfaces";
 
 const style = {
-  wrapper: `w-screen flex items-center justify-center mt-14`,
+  wrapper: `w-screen flex items-center justify-center mt-10`,
   content: `bg-gray-900 w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   transferPropContainer: `bg-gray-800 my-3 rounded-2xl p-6 text-3xl  border border-gray-800 hover:border-gray-600  flex justify-between`,
