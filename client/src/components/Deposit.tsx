@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect} from "react";
 import { useWeb3React } from "@web3-react/core";
 import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
