@@ -3,7 +3,7 @@ import Header from "./Header";
 import DepositsList from "./DepositsList";
 import Deposit from "./Deposit";
 import { useWeb3React } from "@web3-react/core";
-import { IInboundDepositProps, TimeLockDepositType } from "../types/interfaces";
+
 const Main = (): JSX.Element => {
   const { account, chainId } = useWeb3React();
   if (account && chainId !== 42) {
