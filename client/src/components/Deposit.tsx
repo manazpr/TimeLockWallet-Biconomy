@@ -2,20 +2,19 @@ import React, { useState, useEffect} from "react";
 import { useWeb3React } from "@web3-react/core";
 import { Decimal } from "decimal.js";
 import { ethers } from "ethers";
-import { AiOutlineDown } from 'react-icons/ai';
 import ethLogo from '../assets/eth.png';
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { ERC20Util } from "../ethereum/ERC20Util";
 import { TimeLockDepositType } from "../types/interfaces";
 
 const style = {
-  wrapper: `w-screen flex items-center justify-center mt-10`,
+  wrapper: `flex items-center justify-center mt-10`,
   content: `bg-gray-900 w-[40rem] rounded-2xl p-4`,
   formHeader: `px-2 flex items-center justify-between font-semibold text-xl`,
   transferPropContainer: `bg-gray-800 my-3 rounded-2xl p-6 text-3xl  border border-gray-800 hover:border-gray-600  flex justify-between`,
   transferPropInput: `bg-transparent placeholder:text-gray-200 outline-none mb-6 w-full text-2xl`,
   currencySelector: `flex w-1/4`,
-  currencySelectorContent: `w-full h-min flex justify-between items-center bg-[#2D2F36] hover:bg-[#41444F] rounded-2xl text-xl font-medium cursor-pointer p-2 mt-[-0.2rem]`,
+  currencySelectorContent: `w-full h-min flex justify-between items-center bg-gray-700 hover:bg-gray-600 rounded-2xl text-xl font-medium cursor-pointer p-2 mt-[-0.2rem]`,
   currencySelectorIcon: `flex items-center`,
   currencySelectorTicker: `mx-2`,
   currencySelectorArrow: `text-lg`,
@@ -145,11 +144,10 @@ export default function Deposit(): JSX.Element {
 
   return (
     <div>
-<div className={style.wrapper}>
+    <div className={style.wrapper}>
       <div className={style.content}>
         <div className={style.formHeader}>
           <div>Deposit</div>
-          
           <div>
          {statusMessage}
           </div>
@@ -162,8 +160,7 @@ export default function Deposit(): JSX.Element {
             onChange={(event) => setAmount(parseFloat(event.target.value))}
             required  
           />
-               
-                <div className="flex items-center p-2">
+              <div className="flex items-center p-2">
                 <img src={ethLogo} alt='eth logo' height={50} width={50} />
               </div>
                 <select value={
@@ -187,9 +184,6 @@ export default function Deposit(): JSX.Element {
                   ERC20
                 </option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <AiOutlineDown />
-              </div>
         </div>
         <div className={style.transferPropContainer}>
           <input

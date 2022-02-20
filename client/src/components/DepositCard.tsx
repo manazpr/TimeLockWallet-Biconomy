@@ -7,7 +7,7 @@ import { ERC20Util } from "../ethereum/ERC20Util";
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
 import { IInboundDepositProps, TimeLockDepositType } from "../types/interfaces";
 import { ProviderContext } from "../context/providercontext";
-import ethLogo from "../assets/eth.png";
+import ethLogo from "../assets/ethCurrency.png";
 
 export default function DepositCard(props: IInboundDepositProps) {
   const { library, chainId, account } = useWeb3React();
@@ -18,6 +18,16 @@ export default function DepositCard(props: IInboundDepositProps) {
   const [decimals, setDecimals] = useState<number | null>(null);
   const [displayAmount, setDisplayAmount] = useState<Decimal | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const style = {
+    wrapper: `h-full text-white select-none h-full flex-1 pt-14 flex items-end justify-end pb-12 px-8`,
+    txHistoryItem: `bg-gray-900 rounded-lg mx-3 px-4 py-2 my-2 flex items-center justify-end`,
+    txDetails: `flex items-center mx-1`,
+    toAddress: `text-green-500 mx-4`,
+    txTimestamp: `mx-6 text-red-700`,
+    claimButton: `flex items-center`,
+    Button: `bg-blue-600 my-3 rounded-3xl py-1.5 px-6 text-white font-color-white font-semibold flex items-center justify-center cursor-pointer border border-blue-600 hover:border-blue-400`
+  }
 
   useEffect(() => {
     (async () => {
@@ -65,22 +75,22 @@ export default function DepositCard(props: IInboundDepositProps) {
   };
 
   return (
-  <div className="bg-white rounded-3xl border shadow-xl p-8 w-3/6 align-center justify-end ">
-    <div className="flex justify-between items-center mb-4">
-    <img src={ethLogo} alt='eth logo' height={80} width={80}/>
-    <h1 className="font-bold text-xl text-gray-700">{displayAmount != null && <>{displayAmount.toString()}</>}{" "}
-          {props.deposit.depositType === TimeLockDepositType.ETH
-            ? "ETH"
-            : "Tokens"}</h1>
-        
-      <div>
-      <span className="font-medium text-xs text-gray-500 flex justify-end">Received From</span>
-      <span className="font-bold text-green-500 flex justify-end">{props.deposit.depositor}</span><br /><br />
-      <span className="font-medium text-xs text-gray-500 flex justify-end">Status</span>
-        <span className="flex justify-end font-bold text-red-500 ">
-        {props.deposit.claimed ? (
-           "Claimed"
-          ) : (
+<>
+      <div className={style.txDetails}>
+        <img src={ethLogo} height={20} width={15} alt='eth' />
+           {displayAmount != null && <>{displayAmount.toString()}</>}{" "}
+           {props.deposit.depositType === TimeLockDepositType.ETH
+            ? "Ξ"
+            : "Tokens"} received from{' '}
+                <span className={style.toAddress}>
+                  {props.deposit.depositor.substring(0, 6)}... {props.deposit.depositor.substring(36)}
+                </span>
+              </div>{' '}
+              Status{' '}
+              <div className={style.txTimestamp}>
+               {props.deposit.claimed ? (
+               "Claimed"
+            ) : (
             <>
               {`${new Date(
                 props.deposit.minimumReleaseTimestamp.toNumber() * 1000
@@ -90,27 +100,21 @@ export default function DepositCard(props: IInboundDepositProps) {
               <Countdown
                 date={
                   new Date(
-                    props.deposit.minimumReleaseTimestamp.toNumber() * 1000
-                  )
-                }
-              />
+                    props.deposit.minimumReleaseTimestamp.toNumber() * 1000 )
+                }/>
             </>
-          )}
-      </span>
-      </div>
-    </div>
-    <div>
-           {props.deposit.claimed || (
-          <div
-            onClick={claim} className="bg-blue-700 my-1 rounded-2xl py-3 px-1 text-white font-color-white font-semibold flex items-center justify-center cursor-pointer border border-[#2172E5] hover:border-[#234169]"
-          >
-            Claim
-          </div>
-     
-      )}
-      {loading && <LinearProgress />}
-    </div>
-  </div>
-
+             )}
+            </div>
+            <div className={style.claimButton}>
+              {props.deposit.claimed || (
+                   <div
+                     onClick={claim} className={style.Button}
+                    >
+                   Claim
+                   </div>
+              )}
+              {loading && <LinearProgress />}
+             </div> 
+   </>
   );
 }

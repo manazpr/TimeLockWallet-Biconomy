@@ -31,15 +31,13 @@ export default function DepositsList(): JSX.Element {
   }, [account, chainId]);
 
   return (
-   
-    <Grid container spacing={1} alignContent="center">
-      
+    <div className="pt-14 justify-center pb-8 flex-1 flex-wrap mx-20">
+     <div className="px-2 flex items-center justify-center font-semibold text-xl py-2"><div>Incoming Transactions</div></div>
       {inboundDeposits.map((deposit) => (
-        <Grid item xs={12} key={deposit.depositId.toNumber()}>
+        <div className="bg-black rounded-lg py-2 my-1.5 flex items-center justify-center px-6 mx-20" key={deposit.depositId.toNumber()}>
           <DepositCard deposit={deposit} />
-        </Grid>
+        </div>
       ))}
-    </Grid>
- 
+      </div>
 );
 }
