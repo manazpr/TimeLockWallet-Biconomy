@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
 import { useWeb3React } from "@web3-react/core";
 import DepositCard from "./DepositCard";
 import { TimeLockWalletUtil } from "../ethereum/TimeLockWalletUtil";
